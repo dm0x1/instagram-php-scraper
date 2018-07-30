@@ -43,6 +43,11 @@ class Instagram
     private $rhxGis = null;
     private $userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36';
 
+    final protected function getUserSession()
+    {
+        return $this->userSession;
+    }
+
     /**
      * @param string $username
      * @param string $password
@@ -111,7 +116,7 @@ class Instagram
      *
      * @return string
      */
-    private static function getErrorBody($rawError)
+    final protected static function getErrorBody($rawError)
     {
         if (is_string($rawError)) {
             return $rawError;
@@ -216,7 +221,7 @@ class Instagram
      *
      * @return array
      */
-    private function generateHeaders($session, $gisToken = null)
+    final protected function generateHeaders($session, $gisToken = null)
     {
         $headers = [];
         if ($session) {
@@ -315,7 +320,7 @@ class Instagram
      * @return null
      * @throws InstagramException
      */
-    private function getRhxGis()
+    final protected function getRhxGis()
     {
         if ($this->rhxGis === null) {
             try {
@@ -334,7 +339,7 @@ class Instagram
      * @return string
      * @throws InstagramException
      */
-    private function generateGisToken($variables)
+    final protected function generateGisToken($variables)
     {
         return md5(implode(':', [$this->getRhxGis(), $variables ]));
     }
@@ -1290,7 +1295,7 @@ class Instagram
      * @return \Unirest\Response
      * @throws InstagramAuthException
      */
-    private function verifyTwoStep($response, $cookies)
+    final protected function verifyTwoStep($response, $cookies)
     {
         $new_cookies = static::parseCookies($response->headers['Set-Cookie']);
         $cookies = array_merge($cookies, $new_cookies);
@@ -1381,7 +1386,7 @@ class Instagram
         $cachedString->set($this->userSession);
     }
 
-    private static function extractSharedDataFromBody($body)
+    final protected static function extractSharedDataFromBody($body)
     {
         if (preg_match_all('#\_sharedData \= (.*?)\;\<\/script\>#', $body, $out)) {
             return json_decode($out[1][0], true, 512, JSON_BIGINT_AS_STRING);
